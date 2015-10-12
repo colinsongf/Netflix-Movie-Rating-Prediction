@@ -1,0 +1,12 @@
+
+.idea/.name
+
+*.xml
+
+*.golden
+
+*.txt
+
+*.csv
+
+*.queries
