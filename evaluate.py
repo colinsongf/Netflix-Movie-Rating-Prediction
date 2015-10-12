@@ -10,6 +10,8 @@
 
 import csv
 import numpy as np
+import rating_matrix
+import user_sim
 
 
 # extract the movie_id and user_id pair
@@ -25,10 +27,18 @@ def pred_pair(pair_path):
     return pair
 
 
-def rating_pred(pair_path):
+# predict rating for each movie-user pair
+def rating_pred(pair_path, k):
     pair = pred_pair(pair_path)
+    train_mtx = rating_matrix.matrix_transfer(2)
+    # TODO: diff dict
+    user_dot_sim_dict = user_sim.user_dot_sim(train_mtx, k)
+    for row in pair:
+        movie_id = row[0]
+        user_id = row[1]
+        user_sim_list = user_dot_sim_dict[user_id]
 
 
 # use this line to execute the main function
 if __name__ == "__main__":
-    rating_pred("HW4_data/dev.csv")
+    rating_pred("HW4_data/dev.csv", 100)
