@@ -18,7 +18,7 @@ import rating_matrix
 
 # explore the training set
 def explorer():
-    train_mtx = rating_matrix.matrix_transfer()
+    train_mtx = rating_matrix.matrix_transfer(0)
     [row, col] = train_mtx.shape
     # ***** part 1.1.1: statistics *****
     rating_one = np.where(train_mtx == 1)

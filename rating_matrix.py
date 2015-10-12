@@ -14,7 +14,7 @@ import scipy.sparse as sparse
 
 
 # explore the statistics about the training dataset
-def matrix_transfer():
+def matrix_transfer(option):
     train_path = "HW4_data/train.csv"
     row_list = []
     col_list = []
@@ -27,12 +27,15 @@ def matrix_transfer():
             # store user_id in col_list
             col_list.append(float(row[1]))
             # store rating in data_list
-            data_list.append(float(row[2]))
+            if option == 0:
+                data_list.append(float(row[2]))
+            else:
+                if option == 2:
+                    data_list.append(float(row[2]) - 3)
     train_coo_mtx = sparse.coo_matrix((data_list, (row_list, col_list)), dtype=np.float)
-    # print train_coo_mtx.shape
     return train_coo_mtx.toarray()
 
 
 # use this line to execute the main function
-if __name__ == "__main__":
-    matrix_transfer()
+# if __name__ == "__main__":
+#     matrix_transfer(option)

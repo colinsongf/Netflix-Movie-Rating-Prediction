@@ -12,3 +12,5 @@
 *.queries
 
 test.py
+
+*.pyc
