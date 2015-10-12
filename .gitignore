@@ -10,3 +10,5 @@
 *.csv
 
 *.queries
+
+test.py
