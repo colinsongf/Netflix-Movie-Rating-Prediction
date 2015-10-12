@@ -21,15 +21,16 @@ import numpy.linalg as la
 def calculate_sim(movie_id, user_id, k, option):
     train_mtx = rating_matrix.matrix_transfer(2)
     [row, col] = train_mtx.shape
-    user_dot_sim = []
+    # user_dot_sim = []
     user_cos_sim = []
     user_query = train_mtx[:, user_id]
     # knn_user = np.concatenate((knn_user_dot_sim, knn_user_cos_sim), axis=0)
 
     ################################
     if option == 1:
-        for col_idx in range(0, col):
-            user_dot_sim.append(np.dot(user_query, train_mtx[:, col_idx]))
+        # for col_idx in range(0, col):
+        #     user_dot_sim.append(np.dot(user_query, train_mtx[:, col_idx]))
+        user_dot_sim = np.sum(np.transpose(train_mtx) * user_query, axis=1)
         # find the k nearest neighbors
         knn_user_dot_sim = np.argsort(user_dot_sim)[::-1][0: k]
         pred_rating = np.sum(np.take(train_mtx[movie_id, :], knn_user_dot_sim.tolist())) / float(k) + 3
@@ -37,8 +38,7 @@ def calculate_sim(movie_id, user_id, k, option):
 
     ################################
     if option == 2:
-        for col_idx in range(0, col):
-            user_dot_sim.append(np.dot(user_query, train_mtx[:, col_idx]))
+        user_dot_sim = np.sum(np.transpose(train_mtx) * user_query, axis=1)
         # find the k nearest neighbors
         knn_user_dot_sim = np.argsort(user_dot_sim)[::-1][0: k]
 
@@ -66,6 +66,17 @@ def calculate_sim(movie_id, user_id, k, option):
     #################################################################
 
 
+# user sim, column wise
+def user_dot_sim(train_mtx):
+    [row, col] = train_mtx.shape
+    user_dot_sim_dict = {}
+    for col_idx in range(0, col):
+        user_query = train_mtx[:, col_idx]
+        user_dot_sim_val = np.sum(np.transpose(train_mtx) * user_query, axis=1)
+        user_dot_sim_dict[col_idx] = user_dot_sim_val
+    return user_dot_sim_dict
+
+
 # use this line to execute the main function
-if __name__ == "__main__":
-    calculate_sim(5, 5, 50, 3)
+# if __name__ == "__main__":
+#     calculate_sim(5, 5, 50, 3)

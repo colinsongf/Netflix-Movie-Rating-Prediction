@@ -23,9 +23,9 @@ def matrix_transfer(option):
         train_data = csv.reader(f)
         for row in train_data:
             # store movie_id in row_list
-            row_list.append(float(row[0]))
+            row_list.append(int(row[0]))
             # store user_id in col_list
-            col_list.append(float(row[1]))
+            col_list.append(int(row[1]))
             # store rating in data_list
             if option == 0:
                 data_list.append(float(row[2]))
