@@ -67,29 +67,34 @@ def calculate_sim(movie_id, user_id, k, option):
 
 
 # user dot product sim, column wise
-def user_dot_sim(train_mtx, k):
-    [row, col] = train_mtx.shape
-    user_knn_dict = {}
-    for col_idx in range(0, col):
-        user_query = train_mtx[:, col_idx]
-        user_dot_sim_val = np.sum(np.transpose(train_mtx) * user_query, axis=1)
-        # find the k nearest neighbors
-        knn_user_dot_sim = np.argsort(user_dot_sim_val)[::-1][0: k+1]
-        # TODO: if two sim equals, small user_id comes first
-        if col_idx in knn_user_dot_sim:
-            position = np.where(knn_user_dot_sim == col_idx)
-            knn_user_dot_sim = np.delete(knn_user_dot_sim, position)
-            user_knn_dict[col_idx] = knn_user_dot_sim
-        else:
-            knn_user_dot_sim = np.delete(knn_user_dot_sim, len(knn_user_dot_sim) - 1)
-            user_knn_dict[col_idx] = knn_user_dot_sim
-    return user_knn_dict
+def user_dot_sim(train_mtx):
+    dot_sim_mtx = np.dot(np.transpose(train_mtx), train_mtx)
+    return dot_sim_mtx
+
+# def user_dot_sim(train_mtx, k):
+#     [row, col] = train_mtx.shape
+#     user_knn_dict = {}
+#     for col_idx in range(0, col):
+#         user_query = train_mtx[:, col_idx]
+#         user_dot_sim_val = np.sum(np.transpose(train_mtx) * user_query, axis=1)
+#         # find the k nearest neighbors
+#         knn_user_dot_sim = np.argsort(user_dot_sim_val)[::-1][0: k+1]
+#         # TODO: if two sim equals, small user_id comes first
+#         if col_idx in knn_user_dot_sim:
+#             position = np.where(knn_user_dot_sim == col_idx)
+#             knn_user_dot_sim = np.delete(knn_user_dot_sim, position)
+#             user_knn_dict[col_idx] = knn_user_dot_sim
+#         else:
+#             knn_user_dot_sim = np.delete(knn_user_dot_sim, len(knn_user_dot_sim) - 1)
+#             user_knn_dict[col_idx] = knn_user_dot_sim
+#     return user_knn_dict
 
 
 # user cosine sim, column wise
 def user_cos_sim(train_mtx):
     cos_sim_mtx = 1 - distance.cdist(np.transpose(train_mtx), np.transpose(train_mtx), 'cosine')
     return cos_sim_mtx
+
 
 # use this line to execute the main function
 # if __name__ == "__main__":
