@@ -29,18 +29,26 @@ def pred_pair(pair_path):
 
 
 # predict rating for each movie-user pair
-def rating_pred(pair_path, k):
+def rating_pred(pair_path, k, option):
     pair = pred_pair(pair_path)
     train_mtx = rating_matrix.matrix_transfer(2)
-    # TODO: diff dict
-    dot_sim_mtx = user_sim.user_dot_sim(train_mtx)
+    # TODO: diff mtx
+    user_sim_mtx = []
     pred_list = []
+    if option == 1:
+        user_sim_mtx = user_sim.user_dot_sim(train_mtx)
+    else:
+        if option == 3:
+            # TODO: cos sim zero encounters
+            user_sim_mtx = user_sim.user_cos_sim(train_mtx)
+
+    # TODO: weighted mean
     for row in pair:
         movie_id = row[0]
         user_id = row[1]
-        dot_sim_list = dot_sim_mtx[user_id]
+        user_sim_list = user_sim_mtx[user_id]
         # top k+1 nearest neighbors
-        user_knn_list = np.argsort(dot_sim_list)[::-1][0: k+1]
+        user_knn_list = np.argsort(user_sim_list)[::-1][0: k+1]
         if user_id in user_knn_list:
             position = np.where(user_knn_list == user_id)
             user_knn_list = np.delete(user_knn_list, position)
@@ -66,6 +74,6 @@ def file_writer(pred_list):
 if __name__ == "__main__":
     # pass the value of k
     start = timeit.default_timer()
-    rating_pred("HW4_data/dev.csv", 10)
+    rating_pred("HW4_data/dev.csv", 10, 1)
     end = timeit.default_timer()
     print end - start
