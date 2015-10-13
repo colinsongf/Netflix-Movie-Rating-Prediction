@@ -4,6 +4,10 @@
 #
 #   evaluate:
 #       predict rating in the dev set and test set
+#       option 1: dot product sim & mean
+#       option 2: dot product sim & weighted mean
+#       option 3: cos sim & mean
+#       option 4: cos sim & weighted mean
 #
 #################################################################
 
@@ -49,6 +53,7 @@ def rating_pred(pair_path, k, option):
         user_sim_list = user_sim_mtx[user_id]
         # top k+1 nearest neighbors
         user_knn_list = np.argsort(user_sim_list)[::-1][0: k+1]
+        # TODO: if two sim equals, small user_id comes first
         if user_id in user_knn_list:
             position = np.where(user_knn_list == user_id)
             user_knn_list = np.delete(user_knn_list, position)
