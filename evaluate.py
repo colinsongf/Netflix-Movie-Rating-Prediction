@@ -12,6 +12,7 @@ import csv
 import numpy as np
 import rating_matrix
 import user_sim
+import timeit
 
 
 # extract the movie_id and user_id pair
@@ -51,10 +52,13 @@ def file_writer(pred_list):
     f = open('user_dev_pred.txt', 'w')
     num = len(pred_list)
     for idx in range(0, num):
-        f.write("{}\n".format(pred_list[num]))
+        f.write("{}\n".format(pred_list[idx]))
 
 
 # use this line to execute the main function
 if __name__ == "__main__":
     # pass the value of k
+    start = timeit.default_timer()
     rating_pred("HW4_data/dev.csv", 10)
+    end = timeit.default_timer()
+    print end - start
