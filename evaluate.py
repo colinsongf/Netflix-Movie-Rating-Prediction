@@ -49,7 +49,7 @@ def rating_pred(pair_path, k):
 # write the result into txt file
 def file_writer(pred_list):
     # write the ranking result into txt file
-    f = open('user_dev_pred.txt', 'w')
+    f = open('eval/user_dev_pred.txt', 'w')
     num = len(pred_list)
     for idx in range(0, num):
         f.write("{}\n".format(pred_list[idx]))

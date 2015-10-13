@@ -66,7 +66,7 @@ def calculate_sim(movie_id, user_id, k, option):
     #################################################################
 
 
-# user sim, column wise
+# user dot product sim, column wise
 def user_dot_sim(train_mtx, k):
     [row, col] = train_mtx.shape
     user_knn_dict = {}
@@ -85,6 +85,11 @@ def user_dot_sim(train_mtx, k):
             user_knn_dict[col_idx] = knn_user_dot_sim
     return user_knn_dict
 
+
+# user cosine sim, column wise
+def user_cos_sim(train_mtx):
+    cos_sim_mtx = 1 - distance.cdist(np.transpose(train_mtx), np.transpose(train_mtx), 'cosine')
+    return cos_sim_mtx
 
 # use this line to execute the main function
 # if __name__ == "__main__":
