@@ -36,15 +36,14 @@ def pred_pair(pair_path):
 def rating_pred(pair_path, k, option):
     pair = pred_pair(pair_path)
     train_mtx = rating_matrix.matrix_transfer(2)
-    # TODO: diff mtx
     user_sim_mtx = []
     pred_list = []
-    if option == 1:
+    if option == 1 or option == 2:
         user_sim_mtx = user_sim.user_dot_sim(train_mtx)
-    else:
-        if option == 3:
-            # TODO: cos sim zero encounters
-            user_sim_mtx = user_sim.user_cos_sim(train_mtx)
+    if option == 3 or option == 4:
+        # TODO: cos sim zero encounters
+        user_sim_mtx = user_sim.user_cos_sim(train_mtx)
+        user_sim_mtx = np.nan_to_num(user_sim_mtx)
 
     # TODO: weighted mean
     for row in pair:
@@ -59,7 +58,17 @@ def rating_pred(pair_path, k, option):
             user_knn_list = np.delete(user_knn_list, position)
         else:
             user_knn_list = np.delete(user_knn_list, len(user_knn_list) - 1)
-        pred_rating = np.sum(np.take(train_mtx[movie_id, :], user_knn_list.tolist())) / float(k) + 3
+        pred_rating = 0
+        if option == 1 or option == 3:
+            pred_rating = np.sum(np.take(train_mtx[movie_id, :], user_knn_list.tolist())) / float(k) + 3
+            # TODO: problem exists
+        if option == 2 or option == 4:
+            user_knn_sim = user_sim_list[user_knn_list]
+            if np.sum(user_knn_sim) != 0:
+                weight = user_knn_sim / np.sum(user_knn_sim)
+                pred_rating = np.sum(np.multiply(np.take(train_mtx[movie_id, :], user_knn_list.tolist()), weight)) + 3
+            else:
+                pred_rating = 3.0
         pred_list.append(pred_rating)
     # output the result
     file_writer(pred_list)
@@ -79,6 +88,6 @@ def file_writer(pred_list):
 if __name__ == "__main__":
     # pass the value of k
     start = timeit.default_timer()
-    rating_pred("HW4_data/dev.csv", 10, 1)
+    rating_pred("HW4_data/dev.csv", 10, 3)
     end = timeit.default_timer()
     print end - start

@@ -27,14 +27,9 @@ def matrix_transfer(option):
             # store user_id in col_list
             col_list.append(int(row[1]))
             # store rating in data_list
-            data_list.append(float(row[2]))
+            if option == 0:
+                data_list.append(float(row[2]))
+            if option == 2:
+                data_list.append(float(row[2]) - 3)
     train_coo_mtx = sparse.coo_matrix((data_list, (row_list, col_list)), dtype=np.float)
-    train_mtx = train_coo_mtx.toarray()
-    if option == 2:
-        train_mtx -= 3
-    return train_mtx
-
-
-# use this line to execute the main function
-# if __name__ == "__main__":
-#     matrix_transfer(option)
+    return train_coo_mtx.toarray()
