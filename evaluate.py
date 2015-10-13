@@ -32,13 +32,29 @@ def rating_pred(pair_path, k):
     pair = pred_pair(pair_path)
     train_mtx = rating_matrix.matrix_transfer(2)
     # TODO: diff dict
-    user_dot_sim_dict = user_sim.user_dot_sim(train_mtx, k)
+    user_knn_dict = user_sim.user_dot_sim(train_mtx, k)
+    pred_list = []
     for row in pair:
         movie_id = row[0]
         user_id = row[1]
-        user_sim_list = user_dot_sim_dict[user_id]
+        user_knn_list = user_knn_dict[user_id]
+        pred_rating = np.sum(np.take(train_mtx[movie_id, :], user_knn_list.tolist())) / float(k) + 3
+        pred_list.append(pred_rating)
+    # output the result
+    file_writer(pred_list)
+    return pred_list
+
+
+# write the result into txt file
+def file_writer(pred_list):
+    # write the ranking result into txt file
+    f = open('user_dev_pred.txt', 'w')
+    num = len(pred_list)
+    for idx in range(0, num):
+        f.write("{}\n".format(pred_list[num]))
 
 
 # use this line to execute the main function
 if __name__ == "__main__":
-    rating_pred("HW4_data/dev.csv", 100)
+    # pass the value of k
+    rating_pred("HW4_data/dev.csv", 10)

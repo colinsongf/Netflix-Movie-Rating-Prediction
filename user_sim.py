@@ -69,20 +69,21 @@ def calculate_sim(movie_id, user_id, k, option):
 # user sim, column wise
 def user_dot_sim(train_mtx, k):
     [row, col] = train_mtx.shape
-    user_dot_sim_dict = {}
+    user_knn_dict = {}
     for col_idx in range(0, col):
         user_query = train_mtx[:, col_idx]
         user_dot_sim_val = np.sum(np.transpose(train_mtx) * user_query, axis=1)
         # find the k nearest neighbors
         knn_user_dot_sim = np.argsort(user_dot_sim_val)[::-1][0: k+1]
+        # TODO: if two sim equals, small user_id comes first
         if col_idx in knn_user_dot_sim:
             position = np.where(knn_user_dot_sim == col_idx)
             knn_user_dot_sim = np.delete(knn_user_dot_sim, position)
-            user_dot_sim_dict[col_idx] = knn_user_dot_sim
+            user_knn_dict[col_idx] = knn_user_dot_sim
         else:
             knn_user_dot_sim = np.delete(knn_user_dot_sim, len(knn_user_dot_sim) - 1)
-            user_dot_sim_dict[col_idx] = knn_user_dot_sim
-    return user_dot_sim_dict
+            user_knn_dict[col_idx] = knn_user_dot_sim
+    return user_knn_dict
 
 
 # use this line to execute the main function
