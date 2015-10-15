@@ -46,7 +46,7 @@ def k_means(train_mtx, k_cluster):
         # update the k cluster center
         for idx_k in range(0, len(center_mtx)):
             center_mtx[idx_k] = train_mtx[k_dict[idx_k], :].mean(axis=0)
-
+        # check if converged
         if cos_sim_sum > max_sum_cos_dis and cos_sim_sum - max_sum_cos_dis > 5:
             max_sum_cos_dis = cos_sim_sum
             print max_sum_cos_dis
@@ -62,10 +62,10 @@ def bipartite(user_k, item_k):
     [row, col] = train_mtx_ori.shape
     train_mtx = np.transpose(train_mtx_ori)
     num_of_round = 0
-    # user_k = 500
-    # item_k = 250
     user_dict = {}
     item_dict = {}
+    train_mtx_p = []
+    train_mtx_pp = []
 
     while num_of_round < 5:
         num_of_round += 1
@@ -85,13 +85,5 @@ def bipartite(user_k, item_k):
         train_mtx = np.transpose(train_mtx_pp)
 
     print 'bipartite finished.'
-    user_item_dict = (user_dict, item_dict)
+    user_item_dict = (user_dict, train_mtx_p, item_dict, train_mtx_pp)
     return user_item_dict
-
-
-# use this line to execute the main function
-if __name__ == "__main__":
-    start = timeit.default_timer()
-    ui_dict = bipartite()
-    end = timeit.default_timer()
-    print end - start
