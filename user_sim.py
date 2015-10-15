@@ -25,8 +25,3 @@ def user_cos_sim(train_mtx):
     # nonzero_train_mtx = np.delete(train_mtx, zero_vector, 1)
     cos_sim_mtx = 1 - distance.cdist(np.transpose(train_mtx), np.transpose(train_mtx), 'cosine')
     return cos_sim_mtx
-
-
-# use this line to execute the main function
-# if __name__ == "__main__":
-#     calculate_sim(5, 5, 50, 3)

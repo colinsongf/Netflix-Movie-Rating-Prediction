@@ -33,6 +33,7 @@ def pred_pair(pair_path):
     return pair
 
 
+# ***** Experiment 1 *****
 # predict rating for each movie-user pair
 def user_rating_pred(pair_path, k, option):
     pair = pred_pair(pair_path)
@@ -79,7 +80,8 @@ def user_rating_pred(pair_path, k, option):
     return pred_list
 
 
-# movie-movie
+# ***** Experiment 2 *****
+# movie-movie similarity prediction
 def item_rating_pred(pair_path, k, option):
     pair = pred_pair(pair_path)
     train_mtx = rating_matrix.matrix_transfer(2)
@@ -108,12 +110,62 @@ def item_rating_pred(pair_path, k, option):
         if option == 1 or option == 3:
             pred_rating = np.sum(np.take(train_mtx[:, user_id], item_knn_list.tolist())) / float(k) + 3
         if option == 2 or option == 4:
-            user_knn_sim = item_sim_list[item_knn_list]
-            if np.sum(user_knn_sim) != 0:
-                weight = user_knn_sim / np.sum(user_knn_sim)
-                pred_rating = np.sum(np.multiply(np.take(train_mtx[:, user_id], item_sim_list.tolist()), weight)) + 3
+            item_knn_sim = item_sim_list[item_knn_list]
+            if np.sum(item_knn_sim) != 0:
+                weight = item_knn_sim / np.sum(item_knn_sim)
+                pred_rating = np.sum(np.multiply(np.take(train_mtx[:, user_id], item_knn_list.tolist()), weight)) + 3
             else:
                 pred_rating = 3.0
+        pred_list.append(pred_rating)
+    # output the result
+    file_writer(pred_list)
+    return pred_list
+
+
+# ***** Experiment 3 *****
+# PCC based method, user bias standardization
+def pcc_user_rating_pred(pair_path, k, option):
+    pair = pred_pair(pair_path)
+    train_mtx = rating_matrix.matrix_transfer(2)
+    user_zero_vec = np.where(~train_mtx.any(axis=0))[0]
+    # add a bias to the all zero column vectors
+    train_mtx[0, [user_zero_vec]] = 0.001
+    # user rating standardization
+    train_mtx = train_mtx - np.sum(train_mtx, axis=0) / len(train_mtx)
+    train_mtx /= np.linalg.norm(train_mtx, axis=0)
+    user_sim_mtx = []
+    pred_list = []
+    if option == 1 or option == 2:
+        user_sim_mtx = user_sim.user_dot_sim(train_mtx)
+    if option == 3 or option == 4:
+        user_sim_mtx = user_sim.user_cos_sim(train_mtx)
+
+    # TODO: weighted mean need refine
+    for row in pair:
+        pred_rating = 0
+        movie_id = row[0]
+        user_id = row[1]
+        user_sim_list = user_sim_mtx[user_id]
+        # top k+1 nearest neighbors
+        user_knn_list = np.argsort(user_sim_list)[::-1][0: k+1]
+        # TODO: if two sim equals, small user_id comes first
+        if user_id in user_knn_list:
+            position = np.where(user_knn_list == user_id)
+            user_knn_list = np.delete(user_knn_list, position)
+        else:
+            user_knn_list = np.delete(user_knn_list, len(user_knn_list) - 1)
+
+        if option == 1 or option == 3:
+            pred_rating = np.sum(np.take(train_mtx[movie_id, :], user_knn_list.tolist())) / float(k) + 3
+        # TODO: problem exists, what if weighted sum is zero
+        if option == 2 or option == 4:
+            user_knn_sim = user_sim_list[user_knn_list]
+            if np.sum(user_knn_sim) != 0:
+                weight = user_knn_sim / np.sum(user_knn_sim)
+                pred_rating = np.sum(np.multiply(np.take(train_mtx[movie_id, :], user_knn_list.tolist()), weight)) + 3
+            else:
+                pred_rating = 3.0
+
         pred_list.append(pred_rating)
     # output the result
     file_writer(pred_list)
@@ -134,6 +186,6 @@ if __name__ == "__main__":
     # pass the value of k
     start = timeit.default_timer()
     # user_rating_pred("HW4_data/dev.csv", 500, 3)
-    item_rating_pred("HW4_data/dev.csv", 10, 1)
+    pcc_user_rating_pred("HW4_data/dev.csv", 10, 1)
     end = timeit.default_timer()
     print end - start
