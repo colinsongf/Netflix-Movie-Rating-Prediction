@@ -13,7 +13,6 @@ import numpy as np
 import scipy.spatial.distance as distance
 import random
 import rating_matrix
-import timeit
 
 
 # row wise k-means for train_mtx
@@ -49,10 +48,10 @@ def k_means(train_mtx, k_cluster):
         # check if converged
         if cos_sim_sum > max_sum_cos_dis and cos_sim_sum - max_sum_cos_dis > 5:
             max_sum_cos_dis = cos_sim_sum
-            print max_sum_cos_dis
+            # print max_sum_cos_dis
         if cos_sim_sum > max_sum_cos_dis and cos_sim_sum - max_sum_cos_dis <= 5:
             max_sum_cos_dis = cos_sim_sum
-            print max_sum_cos_dis
+            # print max_sum_cos_dis
             break
     return k_dict
 

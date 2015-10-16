@@ -20,8 +20,5 @@ def user_dot_sim(train_mtx):
 
 # user cosine sim, column wise
 def user_cos_sim(train_mtx):
-    # [row, col] = train_mtx.shape
-    # zero_vector = np.where(~train_mtx.any(axis=0))[0]
-    # nonzero_train_mtx = np.delete(train_mtx, zero_vector, 1)
     cos_sim_mtx = 1 - distance.cdist(np.transpose(train_mtx), np.transpose(train_mtx), 'cosine')
     return cos_sim_mtx
