@@ -11,6 +11,7 @@ import numpy as np
 import rating_matrix
 import item_sim
 import pred_set
+import pred_result
 
 
 # ***** Experiment 2 *****
@@ -51,15 +52,5 @@ def item_rating_pred(pair_path, k, option):
                 pred_rating = 3.0
         pred_list.append(pred_rating)
     # output the result
-    file_writer(pred_list)
+    pred_result.file_writer(pred_list)
     return pred_list
-
-
-# write the result into txt file
-def file_writer(pred_list):
-    # write the ranking result into txt file
-    f = open('eval/user_dev_pred.txt', 'w')
-    num = len(pred_list)
-    for idx in range(0, num):
-        f.write("{}\n".format(pred_list[idx]))
-

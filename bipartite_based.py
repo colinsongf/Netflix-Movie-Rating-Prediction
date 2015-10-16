@@ -12,34 +12,32 @@ import user_sim
 import item_sim
 import pred_set
 import bipartite_clustering
-import timeit
+import pred_result
 
 
 # ***** Experiment 4 *****
-def bipartite_pred(user_k, item_k, pair_path, k, option):
-    op = timeit.default_timer()
+def bipartite_pred(user_k, item_k, pair_path, category, k, option):
     ui_dict = bipartite_clustering.bipartite(user_k, item_k)
-    ed = timeit.default_timer()
-    print ed - op
-    # combine with Experiment 1
-    # user_dict = ui_dict[0]
-    # user_pair = {}
-    # for key, value in user_dict.items():
-    #     for ele in value:
-    #         user_pair[ele] = key
-    # bi_user_rating_pred(user_pair, ui_dict[1], pair_path, k, option)
-    # combine with Experiment 2
-    item_dict = ui_dict[2]
-    item_pair = {}
-    for key, value in item_dict.items():
-        for ele in value:
-            item_pair[ele] = key
-    bi_item_rating_pred(item_pair, ui_dict[3], pair_path, k, option)
+    if category == 'user':
+        # combine with Experiment 1
+        user_dict = ui_dict[0]
+        user_pair = {}
+        for key, value in user_dict.items():
+            for ele in value:
+                user_pair[ele] = key
+        bi_user_rating_pred(user_pair, ui_dict[1], pair_path, k, option)
+    if category == 'movie':
+        # combine with Experiment 2
+        item_dict = ui_dict[2]
+        item_pair = {}
+        for key, value in item_dict.items():
+            for ele in value:
+                item_pair[ele] = key
+        bi_item_rating_pred(item_pair, ui_dict[3], pair_path, k, option)
 
 
 # user based rating prediction with bipartite clustering
 def bi_user_rating_pred(user_pair, train_mtx, pair_path, k, option):
-    start = timeit.default_timer()
     pair = pred_set.pred_pair(pair_path)
     # train_mtx = rating_matrix.matrix_transfer(2)
     user_sim_mtx = []
@@ -74,15 +72,12 @@ def bi_user_rating_pred(user_pair, train_mtx, pair_path, k, option):
 
         pred_list.append(pred_rating)
     # output the result
-    file_writer(pred_list)
-    end = timeit.default_timer()
-    print end - start
+    pred_result.file_writer(pred_list)
     return pred_list
 
 
 # item based rating prediction with bipartite clustering
 def bi_item_rating_pred(item_pair, train_mtx, pair_path, k, option):
-    start = timeit.default_timer()
     pair = pred_set.pred_pair(pair_path)
     item_sim_mtx = []
     pred_list = []
@@ -112,16 +107,5 @@ def bi_item_rating_pred(item_pair, train_mtx, pair_path, k, option):
                 pred_rating = 3.0
         pred_list.append(pred_rating)
     # output the result
-    file_writer(pred_list)
-    end = timeit.default_timer()
-    print end - start
+    pred_result.file_writer(pred_list)
     return pred_list
-
-
-# write the result into txt file
-def file_writer(pred_list):
-    # write the ranking result into txt file
-    f = open('eval/user_dev_pred.txt', 'w')
-    num = len(pred_list)
-    for idx in range(0, num):
-        f.write("{}\n".format(pred_list[idx]))
