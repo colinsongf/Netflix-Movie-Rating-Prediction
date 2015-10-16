@@ -10,7 +10,7 @@
 import numpy as np
 import rating_matrix
 import user_sim
-import item_sim
+import movie_sim
 import pred_set
 import pred_result
 
@@ -70,10 +70,10 @@ def pcc_item_rating_pred(pair_path, k, option):
     item_sim_mtx = []
     pred_list = []
     if option == 1 or option == 2:
-        item_sim_mtx = item_sim.item_dot_sim(pcc_mtx)
+        item_sim_mtx = movie_sim.item_dot_sim(pcc_mtx)
     if option == 3 or option == 4:
         train_mtx[:, [item_zero_vec]] = 0.001
-        item_sim_mtx = item_sim.item_cos_sim(pcc_mtx)
+        item_sim_mtx = movie_sim.item_cos_sim(pcc_mtx)
 
     for row in pair:
         pred_rating = 0

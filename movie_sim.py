@@ -2,7 +2,7 @@
 #
 #   __author__ = 'yanhe'
 #
-#   item_sim:
+#   movie_sim:
 #       calculate movie-movie similarity
 #
 #################################################################

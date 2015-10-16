@@ -9,7 +9,7 @@
 
 import numpy as np
 import user_sim
-import item_sim
+import movie_sim
 import pred_set
 import bipartite_clustering
 import pred_result
@@ -82,11 +82,11 @@ def bi_item_rating_pred(item_pair, train_mtx, pair_path, k, option):
     item_sim_mtx = []
     pred_list = []
     if option == 1 or option == 2:
-        item_sim_mtx = item_sim.item_dot_sim(train_mtx)
+        item_sim_mtx = movie_sim.item_dot_sim(train_mtx)
     if option == 3 or option == 4:
         item_zero_vec = np.where(~train_mtx.any(axis=1))[0]
         train_mtx[[item_zero_vec], 0] = 0.001
-        item_sim_mtx = item_sim.item_cos_sim(train_mtx)
+        item_sim_mtx = movie_sim.item_cos_sim(train_mtx)
 
     for row in pair:
         pred_rating = 0
