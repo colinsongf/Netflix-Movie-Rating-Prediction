@@ -20,5 +20,5 @@ def user_dot_sim(train_mtx):
 
 # user cosine sim, column wise
 def user_cos_sim(train_mtx):
-    cos_sim_mtx = 1 - distance.cdist(np.transpose(train_mtx), np.transpose(train_mtx), 'cosine')
+    cos_sim_mtx = (2 - distance.cdist(np.transpose(train_mtx), np.transpose(train_mtx), 'cosine')) / 2
     return cos_sim_mtx

@@ -26,7 +26,7 @@ def user_rating_pred(pair_path, k, option):
         user_sim_mtx = user_sim.user_dot_sim(train_mtx)
     if option == 3 or option == 4:
         # add a bias to the all zero column vectors
-        train_mtx[:, [user_zero_vec]] = 0.001
+        train_mtx[0, [user_zero_vec]] = 0.001
         user_sim_mtx = user_sim.user_cos_sim(train_mtx)
 
     # TODO: weighted mean need refine
@@ -53,7 +53,7 @@ def user_rating_pred(pair_path, k, option):
                 weight = user_knn_sim / np.sum(user_knn_sim)
                 pred_rating = np.sum(np.multiply(np.take(train_mtx[movie_id, :], user_knn_list.tolist()), weight)) + 3
             else:
-                pred_rating = 3.0
+                pred_rating = np.sum(train_mtx[movie_id, :]) / np.size(np.nonzero(train_mtx[movie_id, :])) + 3
 
         pred_list.append(pred_rating)
     # output the result

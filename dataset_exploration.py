@@ -57,34 +57,34 @@ def explorer():
     print 'movie rating average: ', rating_avg_user, '\n'
 
     # ***** part 1.2.1: user_id 4321 *****
-    userquery = train_mtx[:, 4321]
-    user_dot_sim = []
-    user_cos_sim = []
-    for col_idx in range(0, col):
-        user_dot_sim.append(np.dot(userquery, train_mtx[:, col_idx]))
-        if la.norm(train_mtx[:, col_idx]) == 0:
-            user_cos_sim.append(0)
-        else:
-            user_cos_sim.append(distance.cosine(userquery, train_mtx[:, col_idx]))
-    knn_user_dot_sim = np.argsort(user_dot_sim)[-5:]
-    knn_user_cos_sim = np.argsort(user_cos_sim)[-5:]
-    print 'top 5 NNs of user 4321 by dot product similarity: ', knn_user_dot_sim
-    print 'top 5 NNs of user 4321 by cosine similarity: ', knn_user_cos_sim
+    # userquery = train_mtx[:, 4321]
+    # user_dot_sim = []
+    # user_cos_sim = []
+    # for col_idx in range(0, col):
+    #     user_dot_sim.append(np.dot(userquery, train_mtx[:, col_idx]))
+    #     if la.norm(train_mtx[:, col_idx]) == 0:
+    #         user_cos_sim.append(0)
+    #     else:
+    #         user_cos_sim.append(distance.cosine(userquery, train_mtx[:, col_idx]))
+    # knn_user_dot_sim = np.argsort(user_dot_sim)[-5:]
+    # knn_user_cos_sim = np.argsort(user_cos_sim)[-5:]
+    # print 'top 5 NNs of user 4321 by dot product similarity: ', knn_user_dot_sim
+    # print 'top 5 NNs of user 4321 by cosine similarity: ', knn_user_cos_sim
 
     # ***** part 1.2.2: movie_id 3 *****
-    moviequery = train_mtx[3, :]
-    movie_dot_sim = []
-    movie_cos_sim = []
-    for row_idx in range(0, row):
-        movie_dot_sim.append(np.dot(moviequery, train_mtx[row_idx, :]))
-        if la.norm(train_mtx[row_idx, :]) == 0:
-            movie_cos_sim.append(0)
-        else:
-            movie_cos_sim.append(distance.cosine(moviequery, train_mtx[row_idx, :]))
-    knn_movie_dot_sim = np.argsort(movie_dot_sim)[-5:]
-    knn_movie_cos_sim = np.argsort(movie_cos_sim)[-5:]
-    print 'top 5 NNs of movie 3 by dot product similarity: ', knn_movie_dot_sim
-    print 'top 5 NNs of movie 3 by cosine similarity: ', knn_movie_cos_sim
+    # moviequery = train_mtx[3, :]
+    # movie_dot_sim = []
+    # movie_cos_sim = []
+    # for row_idx in range(0, row):
+    #     movie_dot_sim.append(np.dot(moviequery, train_mtx[row_idx, :]))
+    #     if la.norm(train_mtx[row_idx, :]) == 0:
+    #         movie_cos_sim.append(0)
+    #     else:
+    #         movie_cos_sim.append(distance.cosine(moviequery, train_mtx[row_idx, :]))
+    # knn_movie_dot_sim = np.argsort(movie_dot_sim)[-5:]
+    # knn_movie_cos_sim = np.argsort(movie_cos_sim)[-5:]
+    # print 'top 5 NNs of movie 3 by dot product similarity: ', knn_movie_dot_sim
+    # print 'top 5 NNs of movie 3 by cosine similarity: ', knn_movie_cos_sim
 
 # use this line to execute the main function
 if __name__ == "__main__":

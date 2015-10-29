@@ -14,4 +14,4 @@ def file_writer(pred_list):
     f = open('eval/predictions.txt', 'w')
     num = len(pred_list)
     for idx in range(0, num):
-        f.write("{}\n".format(pred_list[idx]))
+        f.write("%s\n" % pred_list[idx])

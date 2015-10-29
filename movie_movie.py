@@ -49,7 +49,7 @@ def item_rating_pred(pair_path, k, option):
                 weight = item_knn_sim / np.sum(item_knn_sim)
                 pred_rating = np.sum(np.multiply(np.take(train_mtx[:, user_id], item_knn_list.tolist()), weight)) + 3
             else:
-                pred_rating = 3.0
+                pred_rating = np.sum(train_mtx[movie_id, :]) / np.size(np.nonzero(train_mtx[movie_id, :])) + 3
         pred_list.append(pred_rating)
     # output the result
     pred_result.file_writer(pred_list)
